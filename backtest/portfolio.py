@@ -46,7 +46,7 @@ class Portfolio:
         self.trading_history:list[OrderFilled]=[]
         
     def get_account_snapshot(self)->Account:
-        return self.accounte
+        return self.account
     
     def market_update(self,price_dict:dict)->None:
         for symbol in self.account.holdings.keys():

@@ -37,7 +37,7 @@ class call_put_order_generator(backtest.OrderGenerator):
     def __init__(self, threshold: float = 1.2):
         super().__init__(threshold)
     
-    def generate_order(self,signal:float,symbols:list[str],time:pd.datetime,price:dict,account:backtest.Account)->list[backtest.OrderRequest]|None:
+    def generate_order(self,signal:float,symbols:list[str],time:datetime,price:dict,account:backtest.Account)->list[backtest.OrderRequest]|None:
         request:list[backtest.OrderRequest]=[]
         amount=int(account.cash //(price[CONTRACT_CODE]) * MARGIN)
         if signal > self.threshold:

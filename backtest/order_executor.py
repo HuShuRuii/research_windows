@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
-from pandas import datetime
+from datetime import datetime,timedelta
 from .type_declare import OrderRequest, OrderFilled, OrderType, OrderSide,Tick
 
 class OrderExecutor:
-    def __init__(self,commision_rate:float=0,latency:pd.Timedelta=datetime.timedelta(seconds=0),price_dict:dict={}):
+    def __init__(self,commision_rate:float=0,latency:pd.Timedelta=timedelta(seconds=0),price_dict:dict={}):
         self.latency=latency
         self.price_dict=price_dict
         self.commision_rate=commision_rate # percentage commission rate
@@ -14,7 +14,7 @@ class OrderExecutor:
         q=order.quantity if order.action==OrderSide.BUY else -order.quantity
         return OrderFilled(order.symbol,q,order.price,time)
     
-    def execute_with_tick(self,order:OrderRequest,current_time:datetime.datetime,tick:Tick)->OrderFilled|None:
+    def execute_with_tick(self,order:OrderRequest,current_time:datetime,tick:Tick)->OrderFilled|None:
         total:float=0
         settled_quan:int=0
         if order.side==OrderSide.BUY:
