@@ -5,6 +5,7 @@ from .order_executor import OrderExecutor
 from .risk_management import RiskManager
 from .order_generator import OrderGenerator
 import pandas as pd
+from .performance import PerformanceSummary
 from .type_declare import Period
 
 class BacktestEngine:
@@ -42,7 +43,9 @@ class BacktestEngine:
                     if self.risk_manager.check_risk(self.portfolio,order_request):
                         order_filled=self.execution_handler.simple_execute(order_request)
                         self.portfolio.order_settlement(order_filled)
-
+            
             self.portfolio.market_update(current_prices)
+            self.portfolio.add_to_history()
+            
         
-        return self.portfolio.total_value_history
+        return PerformanceSummary(pd.Series(self.portfolio.total_value_history))

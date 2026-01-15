@@ -82,39 +82,3 @@ def time_before_str(days:int,minutes:int=0,seconds:int=0)->str:
     delta=pd.Timedelta(days=days,minutes=minutes,seconds=seconds)
     new_time=time_pd-delta
     return new_time.strftime('%Y-%m-%d %H:%M:%S')
-
-def main():
-    # data=create_T_frame()
-    warning_list=[]
-    option_list=[]
-    for commodity_code in UNDERLYING:
-        main_contract=xtdata.get_main_contract(commodity_code)
-        optionlist=xtdata.get_option_undl_data(main_contract)
-        option_list=option_list+optionlist
-    for option_code in option_list:
-        xtdata.download_history_data(option_code,"1m", start_time='', end_time='')
-        xtdata.subscribe_quote(option_code, period='1m', start_time='', end_time='', count=0, callback=None)
-    next_time=INTERVAL+time.monotonic()
-    while True:
-        endtime=time_before_str(30)
-        data=xtdata.get_market_data_ex(["volume"],option_list,period='1m',start_time='',end_time=endtime)
-        for option_code in option_list:
-            df=pd.DataFrame(data[option_code])
-            df["time"]=pd.to_datetime(df["time"],unit='ms')
-            print(df)
-        print(warning_list)
-        warning_list=[]
-        current_time=time.monotonic()
-        sleep_time=next_time-current_time
-        if sleep_time>0:
-            time.sleep(sleep_time)
-        elif sleep_time<0:
-            print(f"数据处理超时, 超过 {INTERVAL} 秒")
-        next_time+=INTERVAL
-    
-if __name__=="__main__":
-    main()
-# def get_option_chain(commodity_code:str=""):
-#     main_contract=xtdata.get_main_contract(commodity_code)
-#     option_list=xtdata.get_option_undl_data(main_contract)
-#     return option_list

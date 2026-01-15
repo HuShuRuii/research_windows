@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from type_declare import OrderRequest, OrderType, OrderSide
+from type_declare import OrderRequest, OrderType, OrderSide, Account
 import datetime
 from .portfolio import Account
 class OrderGenerator:
